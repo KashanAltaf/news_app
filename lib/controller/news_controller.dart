@@ -7,5 +7,5 @@ class NewsController{
   Future<NewsChannelHeadlineModel> fetchNewChannelHeadlinesApi(String channelName) async{
     final response = await _repo.fetchNewChannelHeadlinesApi(channelName);
     return response ;
-  }
+}
 }

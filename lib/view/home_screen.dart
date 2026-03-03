@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:news_app/controller/news_controller.dart';
+import 'package:news_app/models/news_channel_headline_model.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +19,7 @@ FilterList? selectedMenu;
 String name = 'bbc-news';
 
 class _HomeScreenState extends State<HomeScreen> {
+
   @override
   Widget build(BuildContext context) {
     final height = Get.height * 1;
@@ -69,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   selectedMenu = item;
                 });
               },
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<FilterList>> [
+                itemBuilder: (context) => <PopupMenuEntry<FilterList>> [
                 PopupMenuItem<FilterList>(
                   value: FilterList.bbcNews,
                   child: Text('BBC News'),
@@ -105,6 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
             width: width,
             child: FutureBuilder(
               future: controller.fetchNewChannelHeadlinesApi(name),
+
               builder: (BuildContext context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
