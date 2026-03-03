@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:news_app/controller/news_controller.dart';
+import 'package:news_app/models/news_channel_headline_model.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
@@ -16,14 +17,43 @@ class HomeScreen extends StatefulWidget {
 enum FilterList {bbcNews, aryNews, independent, ign, cnn, alJazeera}
 
 class _HomeScreenState extends State<HomeScreen> {
+  FilterList? selectedMenu;
+  String selectedOutlet = 'bbc-news';
+  Future<NewsChannelHeadlineModel>? _headlinesFuture;
+  bool _futureInitialized = false;
+
+  void _onOutletSelected(FilterList item, NewsController controller) {
+    String name = selectedOutlet;
+    if (item == FilterList.bbcNews) {
+      name = 'bbc-news';
+    } else if (item == FilterList.aryNews) {
+      name = 'ary-news';
+    } else if (item == FilterList.independent) {
+      name = 'independent';
+    } else if (item == FilterList.cnn) {
+      name = 'cnn';
+    } else if (item == FilterList.alJazeera) {
+      name = 'al-jazeera-english';
+    } else if (item == FilterList.ign) {
+      name = 'ign';
+    }
+    setState(() {
+      selectedMenu = item;
+      selectedOutlet = name;
+      _headlinesFuture = controller.fetchNewsChannelHeadlineApi(name);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = Get.height * 1;
     final width = Get.width * 1;
     final NewsController controller = Get.put(NewsController());
     final format = DateFormat("MMMM dd, yyyy");
-    FilterList? selectedMenu;
-    String name = 'bbc-news';
+    if (!_futureInitialized) {
+      _headlinesFuture = controller.fetchNewsChannelHeadlineApi(selectedOutlet);
+      _futureInitialized = true;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('News'),
@@ -46,32 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
           PopupMenuButton(
             initialValue: selectedMenu,
               icon: Icon(Icons.more_vert, color: Colors.black,),
-              onSelected: (FilterList item){
-                if(FilterList.bbcNews.name == item.name){
-                  name = 'bbc-news';
-                }
-                if(FilterList.bbcNews.name == item.name){
-                  name = 'bbc-news';
-                }
-                if(FilterList.aryNews.name == item.name){
-                  name = 'ary-news';
-                }
-                if(FilterList.independent.name == item.name){
-                  name = 'independent';
-                }
-                if(FilterList.cnn.name == item.name){
-                  name = 'cnn';
-                }
-                if(FilterList.alJazeera.name == item.name){
-                  name = 'al-jazeera-english';
-                }
-                if(FilterList.ign.name == item.name){
-                  name == 'ign';
-                }
-                setState(() {
-                  selectedMenu = item;
-                });
-              },
+              onSelected: (FilterList item) => _onOutletSelected(item, controller),
               itemBuilder: (context) => <PopupMenuEntry<FilterList>> [
                 PopupMenuItem<FilterList>(
                   value: FilterList.bbcNews,
@@ -107,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
             height: height * 0.55,
             width: width,
             child: FutureBuilder(
-              future: controller.fetchNewsChannelHeadlineApi(),
+              future: _headlinesFuture,
               builder: (BuildContext context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(

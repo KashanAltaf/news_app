@@ -5,8 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:news_app/res/app_url/app_url.dart';
 
 class NewsRepository{
-  Future<NewsChannelHeadlineModel> fetchNewsChannelHeadlineApi() async {
-    String url = AppUrl.headlineUrl;
+  Future<NewsChannelHeadlineModel> fetchNewsChannelHeadlineApi(String source) async {
+    String url = AppUrl.headlineUrl(source);
     final response = await http.get(Uri.parse(url));
     if(response.statusCode == 200){
       final body = jsonDecode(response.body);
