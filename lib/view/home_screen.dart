@@ -14,6 +14,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 enum FilterList {bbcNews, aryNews, independent, ign, cnn, alJazeera}
+FilterList? selectedMenu;
+String name = 'bbc-news';
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
@@ -22,8 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final width = Get.width * 1;
     final NewsController controller = Get.put(NewsController());
     final format = DateFormat("MMMM dd, yyyy");
-    FilterList? selectedMenu;
-    String name = 'bbc-news';
     return Scaffold(
       appBar: AppBar(
         title: Text('News'),
@@ -50,9 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 if(FilterList.bbcNews.name == item.name){
                   name = 'bbc-news';
                 }
-                if(FilterList.bbcNews.name == item.name){
-                  name = 'bbc-news';
-                }
                 if(FilterList.aryNews.name == item.name){
                   name = 'ary-news';
                 }
@@ -66,13 +63,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   name = 'al-jazeera-english';
                 }
                 if(FilterList.ign.name == item.name){
-                  name == 'ign';
+                  name = 'ign';
                 }
                 setState(() {
                   selectedMenu = item;
                 });
               },
-              itemBuilder: (context) => <PopupMenuEntry<FilterList>> [
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<FilterList>> [
                 PopupMenuItem<FilterList>(
                   value: FilterList.bbcNews,
                   child: Text('BBC News'),
@@ -107,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
             height: height * 0.55,
             width: width,
             child: FutureBuilder(
-              future: controller.fetchNewsChannelHeadlineApi(),
+              future: controller.fetchNewChannelHeadlinesApi(name),
               builder: (BuildContext context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
