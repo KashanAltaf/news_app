@@ -13,6 +13,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+enum FilterList {bbcNews, aryNews, independent, ign, cnn, alJazeera}
+
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final width = Get.width * 1;
     final NewsController controller = Get.put(NewsController());
     final format = DateFormat("MMMM dd, yyyy");
+    FilterList? selectedMenu;
+    String name = 'bbc-news';
     return Scaffold(
       appBar: AppBar(
         title: Text('News'),
@@ -38,6 +42,64 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 30,
           ),
         ),
+        actions: [
+          PopupMenuButton(
+            initialValue: selectedMenu,
+              icon: Icon(Icons.more_vert, color: Colors.black,),
+              onSelected: (FilterList item){
+                if(FilterList.bbcNews.name == item.name){
+                  name = 'bbc-news';
+                }
+                if(FilterList.bbcNews.name == item.name){
+                  name = 'bbc-news';
+                }
+                if(FilterList.aryNews.name == item.name){
+                  name = 'ary-news';
+                }
+                if(FilterList.independent.name == item.name){
+                  name = 'independent';
+                }
+                if(FilterList.cnn.name == item.name){
+                  name = 'cnn';
+                }
+                if(FilterList.alJazeera.name == item.name){
+                  name = 'al-jazeera-english';
+                }
+                if(FilterList.ign.name == item.name){
+                  name == 'ign';
+                }
+                setState(() {
+                  selectedMenu = item;
+                });
+              },
+              itemBuilder: (context) => <PopupMenuEntry<FilterList>> [
+                PopupMenuItem<FilterList>(
+                  value: FilterList.bbcNews,
+                  child: Text('BBC News'),
+                ),
+                PopupMenuItem<FilterList>(
+                  value: FilterList.aryNews,
+                  child: Text('ARY News'),
+                ),
+                PopupMenuItem<FilterList>(
+                  value: FilterList.cnn,
+                  child: Text('CNN'),
+                ),
+                PopupMenuItem<FilterList>(
+                  value: FilterList.ign,
+                  child: Text('IGN'),
+                ),
+                PopupMenuItem<FilterList>(
+                  value: FilterList.independent,
+                  child: Text('Independent'),
+                ),
+                PopupMenuItem<FilterList>(
+                  value: FilterList.alJazeera,
+                  child: Text('Al-Jazeera'),
+                ),
+              ]
+          ),
+        ],
       ),
       body: ListView(
         children: [
