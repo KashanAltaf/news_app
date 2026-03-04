@@ -8,6 +8,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 import 'package:news_app/routes/routes_names.dart';
 
+import '../models/categories_news_model.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -120,6 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: snapshot.data!.articles.length,
+                    shrinkWrap: true,
                     itemBuilder: (context, index) {
                       DateTime dateTime = DateTime.parse(snapshot.data!.articles[index].publishedAt.toString());
                       return SizedBox(
@@ -202,6 +205,110 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
               },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: FutureBuilder<CategoriesNewsModel>(
+                future: controller.fetchCategoriesNewsApi('General'),
+                builder: (BuildContext context, snapshot){
+                  if(snapshot.connectionState == ConnectionState.waiting){
+                    return Center(
+                      child: SpinKitCircle(
+                        size: 50,
+                        color: Colors.blue,
+                      ),
+                    );
+                  }
+                  else{
+                    return Expanded(
+                      child: ListView.builder(
+                        itemCount: snapshot.data!.articles!.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index){
+                          DateTime dateTime = DateTime.parse(snapshot.data!.articles![index].publishedAt.toString());
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 12.0),
+                            child: Row(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: CachedNetworkImage(
+                                    imageUrl: snapshot.data!.articles![index].urlToImage.toString(),
+                                    fit: BoxFit.cover,
+                                    height: height * 0.18,
+                                    width: width * 0.3,
+                                    placeholder: (context, url) => Container(
+                                      child: Center(
+                                        child: SpinKitCircle(
+                                          size: 50,
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) => Icon(Icons.error_outline, color: Colors.red,),
+                                  ),
+                                ),
+                                Expanded(
+                                    child: Container(
+                                      height: height * 0.18,
+                                      padding: EdgeInsets.only(left: 15),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            snapshot.data!.articles![index].title.toString(),
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 15,
+                                              color: Colors.black54,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          Spacer(),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: FittedBox(
+                                                  fit: BoxFit.scaleDown,
+                                                  child: Text(
+                                                    snapshot.data!.articles![index].source!.name.toString(),
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: 14,
+                                                      color: Colors.blue,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: FittedBox(
+                                                  fit: BoxFit.scaleDown,
+                                                  child: Text(
+                                                    format.format(dateTime),
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: 15,
+                                                      color: Colors.black54,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  }
+                }
             ),
           ),
         ],

@@ -54,7 +54,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: categoryName == categoriesList[index] ? Colors.blue : Colors.grey,
+                        color: categoryName == categoriesList[index].toLowerCase() ? Colors.blue : Colors.grey,
                         borderRadius: BorderRadius.circular(20)
                       ),
                       child: Padding(
