@@ -35,7 +35,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
       body: Stack(
         children: [
           Container(
-            height: height * 0.4,
+            height: height * 0.45,
             child: ClipRRect(
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(40),
@@ -58,6 +58,10 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
             padding: EdgeInsets.only(top: 20, left: 20, right: 20),
             decoration: BoxDecoration(
               color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(40),
+                topLeft: Radius.circular(40),
+              ),
             ),
             child: ListView(
               children: [
