@@ -1,5 +1,6 @@
 import 'package:news_app/routes/routes_names.dart';
 import 'package:get/get.dart';
+import 'package:news_app/view/categories_screen.dart';
 import 'package:news_app/view/home_screen.dart';
 
 import '../view/splash_screen.dart';
@@ -15,6 +16,12 @@ class AppRoutes{
     GetPage(
       name: RoutesName.homeScreen,
       page: () => HomeScreen(),
+      transition: Transition.leftToRight,
+      transitionDuration: Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: RoutesName.categoriesScreen,
+      page: () => CategoriesScreen(),
       transition: Transition.leftToRight,
       transitionDuration: Duration(milliseconds: 250),
     ),

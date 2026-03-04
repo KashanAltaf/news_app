@@ -6,6 +6,7 @@ import 'package:news_app/models/news_channel_headline_model.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
+import 'package:news_app/routes/routes_names.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -36,7 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         centerTitle: true,
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.toNamed(RoutesName.categoriesScreen);
+          },
           icon: Image.asset(
             'images/category_icon.png',
             fit: BoxFit.cover,
